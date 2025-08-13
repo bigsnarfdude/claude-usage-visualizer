@@ -30,9 +30,18 @@
 
 ## ✨ Features
 
-### 📊 Instant Analytics
+### 🚀 Version 2 Enhanced Features
+- **Auto-Discovery** - Automatically finds Claude data on macOS, Linux, Windows
+- **One-Command Launch** - Generate dashboard and open browser in one step  
+- **Real-time Style Dashboard** - Professional analytics interface with live metrics
+- **Conversation Table** - Detailed session tracking with filtering (active/recent/inactive)
+- **Project Context** - Smart detection of Python, JavaScript, React, debugging contexts
+- **Playwright Testing** - Automated dashboard testing and validation
+- **Offline Support** - Local Chart.js, works without internet
+
+### 📊 Core Analytics (Both Versions)
 - **Interactive Dashboard** - Beautiful charts without any setup
-- **Command-line Tool** - Detailed reports and JSON output
+- **Command-line Tool** - Detailed reports and JSON output  
 - **Sample Data** - Realistic fake data for immediate testing
 
 ### 🎯 Actionable Insights
@@ -43,24 +52,47 @@
 
 ## Files
 
+### Version 1 (Original)
 - `claude-usage-visualizer.html` - Interactive web dashboard
 - `analyze_claude_usage.py` - Command-line analysis tool
+
+### Version 2 (Enhanced) ⭐ NEW
+- `claude-analyzer-v2.py` - Enhanced analyzer with auto-discovery and real-time features
+- `claude-dashboard` - One-command launcher script  
+- `chart.min.js` - Local Chart.js library for offline use
+- `test_dashboard.py` - Playwright testing suite
+
+### Sample Data & Assets
 - `fake_claude_usage.jsonl` - Sample data for testing
+- `test_realistic_data.jsonl` - Additional test data
 - `claude-code_visualizer.png` - Screenshot of the dashboard
 
 ## 🚀 Getting Started
 
-### Option 1: Web Dashboard (Recommended)
+### Option 1: Enhanced Analyzer (Recommended) ⭐ NEW
 ```bash
 # 1. Clone the repo
 git clone https://github.com/bigsnarfdude/claude-usage-visualizer.git
 cd claude-usage-visualizer
 
-# 2. Open in browser
-open claude-usage-visualizer.html
+# 2. One-command dashboard generation
+./claude-dashboard your_claude_data.jsonl
+
+# Or auto-discover Claude data directory
+./claude-dashboard
+
+# Or use the enhanced analyzer directly  
+python3 claude-analyzer-v2.py --auto --open
 ```
 
-### Option 2: Command Line Analysis
+### Option 2: Web Dashboard (Original)
+```bash
+# Open the static HTML dashboard
+open claude-usage-visualizer.html
+# Upload your JSONL file through the interface
+```
+
+### Option 3: Command Line Analysis
 ```bash
 # Make the script executable
 chmod +x analyze_claude_usage.py

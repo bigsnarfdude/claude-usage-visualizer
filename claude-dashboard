@@ -1,0 +1,25 @@
+#!/bin/bash
+# Claude Usage Dashboard - Quick Launch Script
+# Usage: ./claude-dashboard [data-directory]
+
+SCRIPT_DIR="$(dirname "$0")"
+ANALYZER="$SCRIPT_DIR/claude-analyzer.py"
+
+if [ ! -f "$ANALYZER" ]; then
+    echo "❌ claude-analyzer.py not found in $SCRIPT_DIR"
+    exit 1
+fi
+
+if [ -n "$1" ]; then
+    # Use provided data directory or file
+    if [ -f "$1" ]; then
+        echo "🚀 Generating Claude dashboard from file: $1"
+    else
+        echo "🚀 Generating Claude dashboard from directory: $1"
+    fi
+    python3 "$ANALYZER" --data-dir "$1" --open
+else
+    # Auto-discover data directory
+    echo "🚀 Auto-discovering Claude data and generating dashboard..."
+    python3 "$ANALYZER" --auto --open
+fi

@@ -231,7 +231,7 @@
             </div>
 
             <div class="chart-container">
-                <h3 class="chart-title">📈 Usage Over Time (Hourly)</h3>
+                <h3 class="chart-title">📈 Request Patterns (Hourly)</h3>
                 <div class="chart-wrapper">
                     <canvas id="timeChart"></canvas>
                 </div>
@@ -257,7 +257,7 @@
             </div>
 
             <div class="analysis-section">
-                <h3 class="chart-title">⏰ Peak Usage Times</h3>
+                <h3 class="chart-title">⏰ Peak Request Times</h3>
                 <div id="peak-times"></div>
             </div>
 
@@ -414,12 +414,13 @@
                                 data.topics[topic] = (data.topics[topic] || 0) + 1;
                             });
                             
+                            // Only count user requests for timing analysis (not assistant responses)
                             if (entry.timestamp) {
                                 const date = new Date(entry.timestamp);
                                 data.hourlyUsage[date.getHours()]++;
                                 data.dayOfWeek[date.getDay()]++;
                                 
-                                // Track daily usage
+                                // Track daily usage (user requests only)
                                 const dateKey = date.toISOString().split('T')[0];
                                 data.dailyUsage[dateKey] = (data.dailyUsage[dateKey] || 0) + 1;
                             }

@@ -3,10 +3,10 @@
 # Usage: ./claude-dashboard [data-directory]
 
 SCRIPT_DIR="$(dirname "$0")"
-ANALYZER="$SCRIPT_DIR/claude-analyzer.py"
+ANALYZER="$SCRIPT_DIR/claude-analyzer-v2.py"
 
 if [ ! -f "$ANALYZER" ]; then
-    echo "❌ claude-analyzer.py not found in $SCRIPT_DIR"
+    echo "❌ claude-analyzer-v2.py not found in $SCRIPT_DIR"
     exit 1
 fi
 

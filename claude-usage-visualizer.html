@@ -136,6 +136,31 @@
             margin-top: 15px;
         }
 
+        .insight-item, .recommendation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .insight-icon, .recommendation-icon {
+            font-size: 1.5em;
+            flex-shrink: 0;
+        }
+
+        .insight-text, .recommendation-text {
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .recommendation-item {
+            border-left-color: #28a745;
+        }
+
         .category-tag {
             padding: 8px 16px;
             background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
@@ -240,6 +265,16 @@
                 <h3 class="chart-title">🏷️ Detected Topics</h3>
                 <div id="topics-list"></div>
             </div>
+
+            <div class="analysis-section">
+                <h3 class="chart-title">🚀 Productivity Insights</h3>
+                <div id="insights-list"></div>
+            </div>
+
+            <div class="analysis-section">
+                <h3 class="chart-title">💡 Recommendations</h3>
+                <div id="recommendations-list"></div>
+            </div>
         </div>
     </div>
 
@@ -333,7 +368,10 @@
                 totalTokens: 0,
                 totalCost: 0,
                 sessionCount: new Set(),
-                projectDirs: new Set()
+                projectDirs: new Set(),
+                dailyUsage: {},
+                activeDays: 0,
+                peakDay: 'N/A'
             };
             
             const entries = [];
@@ -380,6 +418,10 @@
                                 const date = new Date(entry.timestamp);
                                 data.hourlyUsage[date.getHours()]++;
                                 data.dayOfWeek[date.getDay()]++;
+                                
+                                // Track daily usage
+                                const dateKey = date.toISOString().split('T')[0];
+                                data.dailyUsage[dateKey] = (data.dailyUsage[dateKey] || 0) + 1;
                             }
                             
                             if (entry.sessionId) data.sessionCount.add(entry.sessionId);
@@ -411,6 +453,20 @@
                 }
             });
             
+            // Calculate daily usage stats
+            data.activeDays = Object.keys(data.dailyUsage).length;
+            if (data.activeDays > 0) {
+                const maxUsage = Math.max(...Object.values(data.dailyUsage));
+                const peakDate = Object.keys(data.dailyUsage).find(date => 
+                    data.dailyUsage[date] === maxUsage
+                );
+                if (peakDate) {
+                    const date = new Date(peakDate);
+                    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                    data.peakDay = `${dayNames[date.getDay()]} (${maxUsage} msgs)`;
+                }
+            }
+            
             return data;
         }
 
@@ -441,6 +497,14 @@
                 <div class="stat-card">
                     <div class="stat-label">Avg Tokens/Request</div>
                     <div class="stat-value">${Math.round(data.totalTokens / Math.max(1, data.messages.length))}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Daily Avg Cost</div>
+                    <div class="stat-value">$${(data.totalCost / Math.max(1, data.activeDays)).toFixed(2)}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Most Active Day</div>
+                    <div class="stat-value">${data.peakDay}</div>
                 </div>
             `;
             document.getElementById('stats-grid').innerHTML = statsHtml;
@@ -591,6 +655,124 @@
                 ).join('');
                 document.getElementById('topics-list').innerHTML = `<div class="category-list">${topicsHtml}</div>`;
             }
+
+            // Productivity Insights
+            const insights = generateProductivityInsights(data);
+            const insightsHtml = insights.map(insight => 
+                `<div class="insight-item">
+                    <div class="insight-icon">${insight.icon}</div>
+                    <div class="insight-text">
+                        <strong>${insight.title}</strong><br>
+                        ${insight.description}
+                    </div>
+                </div>`
+            ).join('');
+            document.getElementById('insights-list').innerHTML = insightsHtml;
+
+            // Recommendations
+            const recommendations = generateRecommendations(data);
+            const recommendationsHtml = recommendations.map(rec => 
+                `<div class="recommendation-item">
+                    <div class="recommendation-icon">${rec.icon}</div>
+                    <div class="recommendation-text">
+                        <strong>${rec.title}</strong><br>
+                        ${rec.description}
+                    </div>
+                </div>`
+            ).join('');
+            document.getElementById('recommendations-list').innerHTML = recommendationsHtml;
+        }
+
+        function generateProductivityInsights(data) {
+            const insights = [];
+            
+            // Peak hour analysis
+            const maxHourUsage = Math.max(...data.hourlyUsage);
+            const peakHour = data.hourlyUsage.indexOf(maxHourUsage);
+            insights.push({
+                icon: '⏰',
+                title: 'Peak Performance Hour',
+                description: `You're most active at ${peakHour}:00 with ${maxHourUsage} requests. Consider scheduling complex tasks during this time.`
+            });
+            
+            // Cost efficiency
+            const avgCostPerMessage = data.totalCost / Math.max(1, data.messages.length);
+            if (avgCostPerMessage < 0.10) {
+                insights.push({
+                    icon: '💰',
+                    title: 'Cost Efficient Usage',
+                    description: `Great job! Your average cost per request ($${avgCostPerMessage.toFixed(3)}) is below the typical range.`
+                });
+            }
+            
+            // Session patterns
+            if (data.activeDays > 0) {
+                const avgMsgsPerDay = data.messages.length / data.activeDays;
+                insights.push({
+                    icon: '📊',
+                    title: 'Usage Pattern',
+                    description: `You average ${avgMsgsPerDay.toFixed(1)} requests per active day across ${data.activeDays} days.`
+                });
+            }
+            
+            // Weekend vs weekday
+            const weekendUsage = data.dayOfWeek[0] + data.dayOfWeek[6]; // Sun + Sat
+            const weekdayUsage = data.dayOfWeek.slice(1, 6).reduce((a, b) => a + b, 0);
+            if (weekendUsage > weekdayUsage * 0.3) {
+                insights.push({
+                    icon: '🏖️',
+                    title: 'Weekend Warrior',
+                    description: `You're active on weekends too! ${weekendUsage} weekend requests vs ${weekdayUsage} weekday requests.`
+                });
+            }
+            
+            return insights;
+        }
+
+        function generateRecommendations(data) {
+            const recommendations = [];
+            
+            // Token usage optimization
+            const avgTokens = data.totalTokens / Math.max(1, data.messages.length);
+            if (avgTokens > 200) {
+                recommendations.push({
+                    icon: '🎯',
+                    title: 'Optimize Request Length',
+                    description: `Your requests average ${Math.round(avgTokens)} tokens. Try being more specific to reduce costs.`
+                });
+            }
+            
+            // Daily budget awareness
+            const dailyAvgCost = data.totalCost / Math.max(1, data.activeDays);
+            if (dailyAvgCost > 5) {
+                recommendations.push({
+                    icon: '💸',
+                    title: 'Budget Monitor',
+                    description: `Daily average: $${dailyAvgCost.toFixed(2)}. Consider setting usage limits or using caching for repetitive tasks.`
+                });
+            }
+            
+            // Productivity timing
+            const lowUsageHours = data.hourlyUsage.filter(usage => usage > 0).length;
+            if (lowUsageHours < 8) {
+                recommendations.push({
+                    icon: '⚡',
+                    title: 'Focus Your Sessions',
+                    description: `You use Claude during ${lowUsageHours} different hours. Consider batching requests for better focus.`
+                });
+            }
+            
+            // Category diversification
+            const categories = Object.keys(data.categories);
+            if (categories.length < 3) {
+                recommendations.push({
+                    icon: '🌟',
+                    title: 'Explore More Use Cases',
+                    description: `You primarily use ${categories.length} category(ies). Try exploring Claude for other tasks like documentation, testing, or code review.`
+                });
+            }
+            
+            return recommendations;
         }
 
         document.getElementById('file-input').addEventListener('change', async (event) => {

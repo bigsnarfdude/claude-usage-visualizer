@@ -1,4 +1,4 @@
-# Claude Usage Visualizer ⚡
+# Claude Usage Visualizer
 
 > Transform your Claude conversations into actionable insights
 
@@ -8,29 +8,29 @@
 
 ## Why Claude Usage Visualizer?
 
-🎯 **Know Your AI Coding Patterns**
+**Know Your AI Coding Patterns**
 - Discover what you actually use Claude for (debugging vs. writing vs. reviewing)
 - Identify your peak productivity hours
 - Track which technologies you work with most
 
-💰 **Cost Transparency**
+**Cost Transparency**
 - Real-time token usage tracking
 - Estimated cost calculations
 - Token usage by category breakdown
 
-📊 **Beautiful Insights, Zero Setup**
+**Beautiful Insights, Zero Setup**
 - Drop-in HTML file - no installation required
 - Works 100% offline in your browser
 - Export-friendly charts for reports
 
-🔒 **Privacy First**
+**Privacy First**
 - All processing happens locally in your browser
 - Your data never leaves your machine
 - Open source and auditable
 
-## ✨ Features
+## Features
 
-### 🚀 Version 2 Enhanced Features
+### Version 2 Enhanced Features
 - **Auto-Discovery** - Automatically finds Claude data on macOS, Linux, Windows
 - **One-Command Launch** - Generate dashboard and open browser in one step  
 - **Real-time Style Dashboard** - Professional analytics interface with live metrics
@@ -39,12 +39,12 @@
 - **Playwright Testing** - Automated dashboard testing and validation
 - **Offline Support** - Local Chart.js, works without internet
 
-### 📊 Core Analytics (Both Versions)
+### Core Analytics (Both Versions)
 - **Interactive Dashboard** - Beautiful charts without any setup
 - **Command-line Tool** - Detailed reports and JSON output  
 - **Sample Data** - Realistic fake data for immediate testing
 
-### 🎯 Actionable Insights
+### Actionable Insights
 - **Peak Performance Hours** - When are you most productive?
 - **Technology Focus** - Which languages/frameworks dominate your usage?
 - **Session Patterns** - How long are your coding sessions?
@@ -56,7 +56,7 @@
 - `claude-usage-visualizer.html` - Interactive web dashboard
 - `analyze_claude_usage.py` - Command-line analysis tool
 
-### Version 2 (Enhanced) ⭐ NEW
+### Version 2 (Enhanced) NEW
 - `claude-analyzer-v2.py` - Enhanced analyzer with auto-discovery and real-time features
 - `claude-dashboard` - One-command launcher script  
 - `chart.min.js` - Local Chart.js library for offline use
@@ -67,9 +67,9 @@
 - `test_realistic_data.jsonl` - Additional test data
 - `claude-code_visualizer.png` - Screenshot of the dashboard
 
-## 🚀 Getting Started
+## Getting Started
 
-### Option 1: Enhanced Analyzer (Recommended) ⭐ NEW
+### Option 1: Enhanced Analyzer (Recommended) NEW
 ```bash
 # 1. Clone the repo
 git clone https://github.com/bigsnarfdude/claude-usage-visualizer.git
@@ -136,35 +136,35 @@ Expects JSONL files with Claude conversation data containing:
 - Model usage statistics
 - Hourly and daily activity patterns
 
-## 🗺️ Roadmap
+## Roadmap
 
-### 🔥 Coming Soon
+### Coming Soon
 - [ ] **GitHub-Style Activity Heatmap** - See your daily coding patterns at a glance
 - [ ] **Cost Calculator** - Real-time token cost estimation with pricing tiers
 - [ ] **Productivity Insights** - AI-powered recommendations for better coding habits
 - [ ] **Export Features** - Generate PDF reports and CSV data exports
 
-### 🚀 Future Features
+### Future Features
 - [ ] **Browser Extension** - Real-time usage tracking and quick stats
 - [ ] **VS Code Integration** - Live usage display in your editor
 - [ ] **Team Analytics** - Compare patterns across your development team
 - [ ] **Goal Setting** - Set and track learning objectives
 - [ ] **Smart Recommendations** - Personalized tips based on your usage patterns
 
-### 💡 Community Ideas
+### Community Ideas
 Have a feature request? [Open an issue](https://github.com/bigsnarfdude/claude-usage-visualizer/issues) or submit a PR!
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Whether it's:
-- 🐛 Bug fixes
-- ✨ New features  
-- 📚 Documentation improvements
-- 🎨 UI/UX enhancements
+- Bug fixes
+- New features  
+- Documentation improvements
+- UI/UX enhancements
 
 Check out our [contribution guidelines](CONTRIBUTING.md) to get started.
 
-## 📊 Usage Analytics
+## Usage Analytics
 
 This tool helps thousands of developers understand their AI-assisted coding patterns. Some interesting findings from the community:
 
@@ -173,7 +173,7 @@ This tool helps thousands of developers understand their AI-assisted coding patt
 - **Session Length**: Average coding session with Claude lasts 23 minutes
 - **Cost Awareness**: Users reduce token usage by 25% after seeing their patterns
 
-## 🎯 Use Cases
+## Use Cases
 
 ### For Individual Developers
 - **Optimize Your Schedule** - Code during your proven peak hours
@@ -187,40 +187,40 @@ This tool helps thousands of developers understand their AI-assisted coding patt
 - **Productivity Benchmarks** - Compare team performance patterns
 - **ROI Measurement** - Quantify AI assistance impact on development speed
 
-## 📱 Screenshots
+## Screenshots
 
 ![Dashboard Overview](claude-code_visualizer.png)
 *Interactive dashboard showing comprehensive usage analytics*
 
-## 🛠️ Requirements
+## Requirements
 
 - **Web Dashboard**: Modern web browser (Chrome, Firefox, Safari, Edge)
 - **CLI Tool**: Python 3.6+ (no additional dependencies)
 - **Data**: Claude Code JSONL export files
 
-## 📄 License
+## License
 
 MIT License - Feel free to use, modify, and distribute!
 
-## ⭐ Show Your Support
+## Show Your Support
 
 If this tool helped you understand your coding patterns better, please:
-- ⭐ Star this repository
-- 🐦 [Tweet about it](https://twitter.com/intent/tweet?text=Just%20discovered%20my%20coding%20patterns%20with%20Claude%20Usage%20Visualizer!%20🚀&url=https://github.com/bigsnarfdude/claude-usage-visualizer)
-- 📝 Write a blog post about your insights
-- 🤝 Contribute new features
+- Star this repository
+- [Tweet about it](https://twitter.com/intent/tweet?text=Just%20discovered%20my%20coding%20patterns%20with%20Claude%20Usage%20Visualizer!%20🚀&url=https://github.com/bigsnarfdude/claude-usage-visualizer)
+- Write a blog post about your insights
+- Contribute new features
 
-## 📞 Support & Community
+## Support & Community
 
-- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/bigsnarfdude/claude-usage-visualizer/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/bigsnarfdude/claude-usage-visualizer/discussions)
-- 📧 **Email**: Create an issue for sensitive topics
+- **Bug Reports**: [GitHub Issues](https://github.com/bigsnarfdude/claude-usage-visualizer/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/bigsnarfdude/claude-usage-visualizer/discussions)
+- **Email**: Create an issue for sensitive topics
 
 ---
 
 <p align="center">
   <strong>Transform your Claude usage data into actionable insights today!</strong><br>
-  <a href="https://github.com/bigsnarfdude/claude-usage-visualizer">⭐ Star on GitHub</a> |
-  <a href="https://bigsnarfdude.github.io/claude-usage-visualizer/">🚀 Try Live Demo</a> |
-  <a href="#-getting-started">📖 Get Started</a>
+  <a href="https://github.com/bigsnarfdude/claude-usage-visualizer">Star on GitHub</a> |
+  <a href="https://bigsnarfdude.github.io/claude-usage-visualizer/">Try Live Demo</a> |
+  <a href="#getting-started">Get Started</a>
 </p>

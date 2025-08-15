@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Usage Activity - GitHub Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #ffffff;
+            color: #24292f;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #24292f;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #656d76;
+            font-size: 1.1em;
+        }
+
+        .file-input-container {
+            background: #f6f8fa;
+            border: 1px solid #d0d7de;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .file-input {
+            padding: 8px 16px;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            background: #ffffff;
+            color: #24292f;
+            margin: 10px;
+        }
+
+        .activity-section {
+            background: #ffffff;
+            border: 1px solid #d0d7de;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .activity-count {
+            font-size: 14px;
+            color: #656d76;
+        }
+
+        .year-selector {
+            background: #f6f8fa;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            color: #24292f;
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        .heatmap-container {
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        .heatmap {
+            display: inline-block;
+            min-width: 100%;
+            width: fit-content;
+        }
+
+        .month-labels {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 10px;
+            color: #656d76;
+            position: relative;
+            height: 20px;
+            width: calc(53 * 13px); /* Same width as weeks container */
+            margin-left: 45px; /* Align with the weeks (day labels width + margin) */
+        }
+
+        .month-label {
+            position: absolute;
+            text-align: left;
+        }
+
+        .calendar-graph {
+            display: flex;
+        }
+
+        .day-labels {
+            display: flex;
+            flex-direction: column;
+            margin-right: 8px;
+            font-size: 9px;
+            color: #656d76;
+        }
+
+        .day-label {
+            height: 11px;
+            line-height: 11px;
+            margin-bottom: 2px;
+        }
+
+        .weeks {
+            display: flex;
+            width: calc(53 * 13px); /* 53 weeks * (11px width + 2px margin) */
+        }
+
+        .week {
+            display: flex;
+            flex-direction: column;
+            margin-right: 2px;
+        }
+
+        .day {
+            width: 11px;
+            height: 11px;
+            margin-bottom: 2px;
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .day-0 { background-color: #ebedf0; }
+        .day-1 { background-color: #9be9a8; }
+        .day-2 { background-color: #40c463; }
+        .day-3 { background-color: #30a14e; }
+        .day-4 { background-color: #216e39; }
+
+        .legend {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-top: 8px;
+            font-size: 11px;
+            color: #656d76;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-left: 8px;
+        }
+
+        .legend-squares {
+            display: flex;
+            margin: 0 4px;
+        }
+
+        .legend-square {
+            width: 10px;
+            height: 10px;
+            margin-right: 2px;
+            border-radius: 2px;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: #ffffff;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: #24292f;
+            pointer-events: none;
+            z-index: 100;
+            white-space: nowrap;
+            display: none;
+            box-shadow: 0 8px 24px rgba(140, 149, 159, 0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: #f6f8fa;
+            border: 1px solid #d0d7de;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #0969da;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: #656d76;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Claude Usage Activity</h1>
+            <p class="subtitle">Visualize your AI-assisted coding patterns like GitHub contributions</p>
+        </div>
+
+        <div class="file-input-container">
+            <p>Upload your Claude usage data (JSONL format)</p>
+            <input type="file" id="fileInput" accept=".jsonl,.json" class="file-input">
+            <p style="margin-top: 10px; font-size: 12px; color: #656d76;">
+                Find your data in: ~/.claude/usage/ or export from Claude Code
+            </p>
+        </div>
+
+        <div class="activity-section">
+            <div class="activity-header">
+                <span class="activity-count" id="activityCount">0 contributions</span>
+            </div>
+
+            <div class="heatmap-container">
+                <div class="heatmap">
+                    <div class="month-labels" id="monthLabels"></div>
+                    <div class="calendar-graph">
+                        <div class="day-labels">
+                            <div class="day-label"></div>
+                            <div class="day-label">Mon</div>
+                            <div class="day-label"></div>
+                            <div class="day-label">Wed</div>
+                            <div class="day-label"></div>
+                            <div class="day-label">Fri</div>
+                            <div class="day-label"></div>
+                        </div>
+                        <div class="weeks" id="weeksContainer"></div>
+                    </div>
+                    <div class="legend">
+                        <span>Less</span>
+                        <div class="legend-squares">
+                            <div class="legend-square day-0"></div>
+                            <div class="legend-square day-1"></div>
+                            <div class="legend-square day-2"></div>
+                            <div class="legend-square day-3"></div>
+                            <div class="legend-square day-4"></div>
+                        </div>
+                        <span>More</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalSessions">0</div>
+                <div class="stat-label">Total Sessions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalMessages">0</div>
+                <div class="stat-label">Total Messages</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalTokens">0</div>
+                <div class="stat-label">Total Tokens</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="longestStreak">0</div>
+                <div class="stat-label">Longest Streak</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        class ClaudeHeatmap {
+            constructor() {
+                this.data = [];
+                this.dailyStats = new Map();
+                this.initializeEventListeners();
+            }
+
+            initializeEventListeners() {
+                document.getElementById('fileInput').addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) this.loadFile(file);
+                });
+            }
+
+            async loadFile(file) {
+                const text = await file.text();
+                const lines = text.trim().split('\n');
+                
+                this.data = [];
+                for (const line of lines) {
+                    try {
+                        const entry = JSON.parse(line);
+                        this.data.push(entry);
+                    } catch (e) {
+                        console.warn('Failed to parse line:', line);
+                    }
+                }
+
+                this.processData();
+                this.renderHeatmap();
+                this.updateStats();
+            }
+
+            processData() {
+                this.dailyStats.clear();
+
+                for (const entry of this.data) {
+                    if (!entry.timestamp) continue;
+
+                    const date = new Date(entry.timestamp);
+                    const dateKey = date.toISOString().split('T')[0];
+                    
+                    if (!this.dailyStats.has(dateKey)) {
+                        this.dailyStats.set(dateKey, {
+                            messages: 0,
+                            tokens: 0,
+                            sessions: new Set()
+                        });
+                    }
+
+                    const dayStats = this.dailyStats.get(dateKey);
+                    dayStats.messages++;
+                    
+                    if (entry.sessionId) {
+                        dayStats.sessions.add(entry.sessionId);
+                    }
+
+                    if (entry.message?.usage?.input_tokens) {
+                        dayStats.tokens += entry.message.usage.input_tokens;
+                    }
+                    if (entry.message?.usage?.output_tokens) {
+                        dayStats.tokens += entry.message.usage.output_tokens;
+                    }
+                }
+
+                // Convert sessions Set to count
+                for (const [date, stats] of this.dailyStats) {
+                    stats.sessionCount = stats.sessions.size;
+                }
+            }
+
+            calculateActivityLevels() {
+                const allCounts = Array.from(this.dailyStats.values())
+                    .map(stats => stats.messages)
+                    .filter(count => count > 0)
+                    .sort((a, b) => a - b);
+                
+                if (allCounts.length === 0) {
+                    this.activityThresholds = { p25: 1, p50: 2, p75: 5, p90: 10 };
+                    return;
+                }
+                
+                this.activityThresholds = {
+                    p25: allCounts[Math.floor(allCounts.length * 0.25)] || 1,
+                    p50: allCounts[Math.floor(allCounts.length * 0.50)] || 2,
+                    p75: allCounts[Math.floor(allCounts.length * 0.75)] || 5,
+                    p90: allCounts[Math.floor(allCounts.length * 0.90)] || 10
+                };
+            }
+
+            getActivityLevel(count) {
+                if (count === 0) return 0;
+                if (count <= this.activityThresholds.p25) return 1;
+                if (count <= this.activityThresholds.p50) return 2;
+                if (count <= this.activityThresholds.p75) return 3;
+                return 4;
+            }
+
+            renderHeatmap() {
+                this.calculateActivityLevels();
+                
+                const weeksContainer = document.getElementById('weeksContainer');
+                const monthLabels = document.getElementById('monthLabels');
+                
+                weeksContainer.innerHTML = '';
+                monthLabels.innerHTML = '';
+
+                if (this.dailyStats.size === 0) {
+                    return;
+                }
+
+                // Find the date range from the actual data
+                const dates = Array.from(this.dailyStats.keys()).sort();
+                const firstDate = new Date(dates[0]);
+                const lastDate = new Date(dates[dates.length - 1]);
+
+                // Start from the Sunday before the first date
+                const calendarStart = new Date(firstDate);
+                const startOffset = calendarStart.getDay();
+                calendarStart.setDate(calendarStart.getDate() - startOffset);
+
+                // End on the Saturday after the last date
+                const calendarEnd = new Date(lastDate);
+                const endOffset = 6 - calendarEnd.getDay();
+                calendarEnd.setDate(calendarEnd.getDate() + endOffset);
+
+                // Calculate total weeks needed
+                const totalDays = Math.ceil((calendarEnd - calendarStart) / (1000 * 60 * 60 * 24)) + 1;
+                const totalWeeks = Math.ceil(totalDays / 7);
+
+                const monthPositions = [];
+                let lastMonth = -1;
+
+                for (let weekIndex = 0; weekIndex < totalWeeks; weekIndex++) {
+                    const week = document.createElement('div');
+                    week.className = 'week';
+
+                    for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
+                        const currentDate = new Date(calendarStart);
+                        currentDate.setDate(calendarStart.getDate() + (weekIndex * 7) + dayIndex);
+                        
+                        const dateKey = currentDate.toISOString().split('T')[0];
+                        const currentMonth = currentDate.getMonth();
+                        
+                        const dayStats = this.dailyStats.get(dateKey);
+                        const messageCount = dayStats ? dayStats.messages : 0;
+                        const activityLevel = this.getActivityLevel(messageCount);
+                        
+                        const dayElement = document.createElement('div');
+                        dayElement.className = `day day-${activityLevel}`;
+                        dayElement.dataset.date = dateKey;
+                        dayElement.dataset.count = messageCount;
+                        dayElement.dataset.tokens = dayStats ? dayStats.tokens : 0;
+                        dayElement.dataset.sessions = dayStats ? dayStats.sessionCount : 0;
+                        
+                        if (messageCount > 0 || (currentDate >= firstDate && currentDate <= lastDate)) {
+                            this.addTooltip(dayElement);
+                        }
+
+                        // Track month positions for labels
+                        if (currentMonth !== lastMonth && currentDate.getDate() <= 7) {
+                            monthPositions.push({
+                                month: currentDate.toLocaleString('default', { month: 'short' }),
+                                position: weekIndex * 13  // 13px per week
+                            });
+                            lastMonth = currentMonth;
+                        }
+
+                        week.appendChild(dayElement);
+                    }
+
+                    weeksContainer.appendChild(week);
+                }
+
+                // Render month labels
+                monthPositions.forEach(({ month, position }) => {
+                    const label = document.createElement('div');
+                    label.className = 'month-label';
+                    label.textContent = month;
+                    label.style.left = `${position}px`;
+                    monthLabels.appendChild(label);
+                });
+
+                this.updateActivityCount();
+            }
+
+            addTooltip(dayElement) {
+                const tooltip = document.getElementById('tooltip');
+                
+                dayElement.addEventListener('mouseenter', (e) => {
+                    const date = new Date(e.target.dataset.date);
+                    const count = parseInt(e.target.dataset.count) || 0;
+                    const tokens = parseInt(e.target.dataset.tokens) || 0;
+                    const sessions = parseInt(e.target.dataset.sessions) || 0;
+                    
+                    const dateStr = date.toLocaleDateString('en-US', { 
+                        weekday: 'short', 
+                        month: 'short', 
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+
+                    tooltip.innerHTML = `
+                        <strong>${dateStr}</strong><br>
+                        ${count} message${count !== 1 ? 's' : ''}<br>
+                        ${sessions} session${sessions !== 1 ? 's' : ''}<br>
+                        ${tokens.toLocaleString()} token${tokens !== 1 ? 's' : ''}
+                    `;
+                    
+                    tooltip.style.display = 'block';
+                    this.positionTooltip(e, tooltip);
+                });
+
+                dayElement.addEventListener('mousemove', (e) => {
+                    this.positionTooltip(e, tooltip);
+                });
+
+                dayElement.addEventListener('mouseleave', () => {
+                    tooltip.style.display = 'none';
+                });
+            }
+
+            positionTooltip(e, tooltip) {
+                const rect = tooltip.getBoundingClientRect();
+                const x = e.pageX + 10;
+                const y = e.pageY - rect.height - 10;
+                
+                tooltip.style.left = `${x}px`;
+                tooltip.style.top = `${y}px`;
+            }
+
+            updateActivityCount() {
+                const totalMessages = Array.from(this.dailyStats.values())
+                    .reduce((sum, stats) => sum + stats.messages, 0);
+                
+                const dateRange = Array.from(this.dailyStats.keys()).sort();
+                if (dateRange.length > 0) {
+                    const firstDate = new Date(dateRange[0]);
+                    const lastDate = new Date(dateRange[dateRange.length - 1]);
+                    const days = Math.ceil((lastDate - firstDate) / (1000 * 60 * 60 * 24)) + 1;
+                    
+                    document.getElementById('activityCount').textContent = 
+                        `${totalMessages} contribution${totalMessages !== 1 ? 's' : ''} over ${days} day${days !== 1 ? 's' : ''}`;
+                } else {
+                    document.getElementById('activityCount').textContent = '0 contributions';
+                }
+            }
+
+            updateStats() {
+                const allSessions = new Set();
+                let totalMessages = 0;
+                let totalTokens = 0;
+
+                for (const [, stats] of this.dailyStats) {
+                    totalMessages += stats.messages;
+                    totalTokens += stats.tokens;
+                }
+
+                // Calculate sessions from raw data
+                for (const entry of this.data) {
+                    if (entry.sessionId) allSessions.add(entry.sessionId);
+                }
+
+                // Calculate longest streak
+                const dates = Array.from(this.dailyStats.keys())
+                    .filter(date => this.dailyStats.get(date).messages > 0)
+                    .sort();
+                
+                let longestStreak = 0;
+                let currentStreak = 0;
+                let prevDate = null;
+
+                for (const dateStr of dates) {
+                    const date = new Date(dateStr);
+                    if (prevDate) {
+                        const dayDiff = Math.floor((date - prevDate) / (1000 * 60 * 60 * 24));
+                        if (dayDiff === 1) {
+                            currentStreak++;
+                        } else {
+                            currentStreak = 1;
+                        }
+                    } else {
+                        currentStreak = 1;
+                    }
+                    longestStreak = Math.max(longestStreak, currentStreak);
+                    prevDate = date;
+                }
+
+                document.getElementById('totalSessions').textContent = allSessions.size.toLocaleString();
+                document.getElementById('totalMessages').textContent = totalMessages.toLocaleString();
+                document.getElementById('totalTokens').textContent = totalTokens.toLocaleString();
+                document.getElementById('longestStreak').textContent = `${longestStreak} day${longestStreak !== 1 ? 's' : ''}`;
+            }
+        }
+
+        // Initialize the heatmap
+        new ClaudeHeatmap();
+    </script>
+</body>
+</html>

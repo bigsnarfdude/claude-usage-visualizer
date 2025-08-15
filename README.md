@@ -31,6 +31,13 @@
 
 ## Features
 
+### GitHub-Style Heatmap NEW
+- **Activity Calendar** - GitHub-style contribution heatmap showing daily Claude usage
+- **Interactive Tooltips** - Hover for detailed daily statistics
+- **Usage Statistics** - Total sessions, messages, tokens, and streaks
+- **Drag & Drop** - Simple file upload interface
+- **Offline Ready** - Works entirely in your browser
+
 ### Version 2 Enhanced Features
 - **Auto-Discovery** - Automatically finds Claude data on macOS, Linux, Windows
 - **One-Command Launch** - Generate dashboard and open browser in one step  
@@ -63,10 +70,13 @@
 - `chart.min.js` - Local Chart.js library for offline use
 - `test_dashboard.py` - Playwright testing suite
 
+### GitHub-Style Visualizations NEW
+- `claude-heatmap.html` - GitHub-style activity heatmap visualization
+- `dense_year_data.jsonl` - Example data for heatmap testing
+
 ### Sample Data & Assets
 - `fake_claude_usage.jsonl` - Sample data for testing
-- `test_realistic_data.jsonl` - Additional test data
-- `claude-code_visualizer.png` - Screenshot of the dashboard
+- `screenshot.png` - Dashboard screenshot
 
 ## Getting Started
 
@@ -86,14 +96,21 @@ cd claude-usage-visualizer
 python3 claude-analyzer-v2.py --auto --open
 ```
 
-### Option 2: Web Dashboard (Original)
+### Option 2: GitHub-Style Heatmap NEW
+```bash
+# Open the GitHub-style activity heatmap
+open claude-heatmap.html
+# Drag and drop your JSONL file to see your coding patterns
+```
+
+### Option 3: Web Dashboard (Original)
 ```bash
 # Open the static HTML dashboard
 open claude-usage-visualizer.html
 # Upload your JSONL file through the interface
 ```
 
-### Option 3: Command Line Analysis
+### Option 4: Command Line Analysis
 ```bash
 # Make the script executable
 chmod +x analyze_claude_usage.py
@@ -139,8 +156,10 @@ Expects JSONL files with Claude conversation data containing:
 
 ## Roadmap
 
+### Recently Added ✅
+- [x] **GitHub-Style Activity Heatmap** - See your daily coding patterns at a glance
+
 ### Coming Soon
-- [ ] **GitHub-Style Activity Heatmap** - See your daily coding patterns at a glance
 - [ ] **Cost Calculator** - Real-time token cost estimation with pricing tiers
 - [ ] **Productivity Insights** - AI-powered recommendations for better coding habits
 - [ ] **Export Features** - Generate PDF reports and CSV data exports

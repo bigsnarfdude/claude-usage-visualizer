@@ -177,7 +177,7 @@ This tool helps thousands of developers understand their AI-assisted coding patt
 
 ## Screenshots
 
-![Dashboard Overview](screenshot.png))
+![Dashboard Overview](screenshot.png)
 *Interactive dashboard showing comprehensive usage analytics*
 
 ## Requirements
@@ -188,27 +188,4 @@ This tool helps thousands of developers understand their AI-assisted coding patt
 
 ## License
 
-MIT License - Feel free to use, modify, and distribute!
-
-## Show Your Support
-
-If this tool helped you understand your coding patterns better, please:
-- Star this repository
-- [Tweet about it](https://twitter.com/intent/tweet?text=Just%20discovered%20my%20coding%20patterns%20with%20Claude%20Usage%20Visualizer!%20🚀&url=https://github.com/bigsnarfdude/claude-usage-visualizer)
-- Write a blog post about your insights
-- Contribute new features
-
-## Support & Community
-
-- **Bug Reports**: [GitHub Issues](https://github.com/bigsnarfdude/claude-usage-visualizer/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/bigsnarfdude/claude-usage-visualizer/discussions)
-- **Email**: Create an issue for sensitive topics
-
----
-
-<p align="center">
-  <strong>Transform your Claude usage data into actionable insights today!</strong><br>
-  <a href="https://github.com/bigsnarfdude/claude-usage-visualizer">Star on GitHub</a> |
-  <a href="https://bigsnarfdude.github.io/claude-usage-visualizer/">Try Live Demo</a> |
-  <a href="#getting-started">Get Started</a>
-</p>
+MIT License - Feel free to use, modify, and distribute

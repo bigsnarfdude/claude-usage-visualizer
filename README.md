@@ -152,19 +152,6 @@ Expects JSONL files with Claude conversation data containing:
 - [ ] **Goal Setting** - Set and track learning objectives
 - [ ] **Smart Recommendations** - Personalized tips based on your usage patterns
 
-### Community Ideas
-Have a feature request? [Open an issue](https://github.com/bigsnarfdude/claude-usage-visualizer/issues) or submit a PR!
-
-## Contributing
-
-We welcome contributions! Whether it's:
-- Bug fixes
-- New features  
-- Documentation improvements
-- UI/UX enhancements
-
-Check out our [contribution guidelines](CONTRIBUTING.md) to get started.
-
 ## Usage Analytics
 
 This tool helps thousands of developers understand their AI-assisted coding patterns. Some interesting findings from the community:
@@ -190,7 +177,7 @@ This tool helps thousands of developers understand their AI-assisted coding patt
 
 ## Screenshots
 
-![Dashboard Overview](claude-code_visualizer.png)
+![Dashboard Overview](screenshot.png))
 *Interactive dashboard showing comprehensive usage analytics*
 
 ## Requirements

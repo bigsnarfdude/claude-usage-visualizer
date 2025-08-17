@@ -1,6 +1,5 @@
 # Claude Usage Visualizer
 
-
 > Transform your Claude conversations into actionable insights
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
